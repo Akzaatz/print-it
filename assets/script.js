@@ -18,49 +18,68 @@ const slides = [
   },
 ];
 
-const imgs = document.querySelectorAll(".slides-container img");
+const sliderContent = document.querySelector("banner-img");
 const next = document.querySelector(".arrow_right");
-const previous = document.querySelector(".arrow_left");
-const dots = document.querySelectorAll(".dot");
+const prev = document.querySelector(".arrow_left");
+
+const tagLineImport = document.querySelector("#banner p");
+
 let index = 0;
 
-//Les Boutons de Navigation
+const lastElement = slides.length - 1;
 
-next.addEventListener("click", nextSlide);
+const dots = document.querySelector(".dots");
+const addImg = document.querySelector(".banner-img");
 
-function nextSlide() {
-  if (index < 3) {
-    imgs[index].classList.remove("active");
-    index++;
-    imgs[index].classList.add("active");
-  } else if (index === 3) {
-    imgs[index].classList.remove("active");
+for (let i = 0; i < slides.length; i++) {
+  const addDot = document.createElement("div");
+  addDot.classList.add("dot");
+  if (i == index) {
+    addDot.classList.add("active-dot");
+  }
+  dots.appendChild(addDot);
+}
+
+const addDot = document.querySelectorAll(".dots .dot");
+console.log(addDot);
+
+next.addEventListener("click", () => {
+  addDot[index].classList.remove("active-dot");
+  index++;
+
+  if (index > lastElement) {
     index = 0;
-    imgs[index].classList.add("active");
   }
-}
+  console.log(slides);
+  addDot[index].classList.add("active-dot");
 
-previous.addEventListener("click", previousSlide);
+  addImg.src = "./assets/images/slideshow/" + slides[index].image;
+  tagLineImport.innerHTML = slides[index].tagLine;
+});
 
-function previousSlide() {
-  if (index > 0) {
-    imgs[index].classList.remove("active");
-    index--;
-    imgs[index].classList.add("active");
-  } else if (index === 0) {
-    imgs[index].classList.remove("active");
-    index = 2;
-    imgs[index].classList.add("active");
+prev.addEventListener("click", () => {
+  addDot[index].classList.remove("active-dot");
+  index--;
+
+  if (index < 0) {
+    index = lastElement;
   }
-}
+  addDot[index].classList.add("active-dot");
+  addImg.src = "./assets/images/slideshow/" + slides[index].image;
+  tagLineImport.innerHTML = slides[index].tagLine;
+});
 
-document.addEventListener("keydown", keypressed);
-function keypressed(e) {
+// sliderContent.src = "./assets/images/slideshow/" + slides[index].image;
+// tagLineImport.innerHTML = slides[index].tagLine;
+
+document.addEventListener("keydown", (keypressed) => {
   if (e.keyCode === 37) {
-    previousSlide();
+    index++;
+    addImg.src = "./assets/images/slideshow/" + slides[index].image;
+    tagLineImport.innerHTML = slides[index].tagLine;
   } else if (e.keyCode === 39) {
-    nextSlide();
+    index--;
+    addImg.src = "./assets/images/slideshow/" + slides[index].image;
+    tagLineImport.innerHTML = slides[index].tagLine;
   }
-}
-
-// Les Dots
+});
